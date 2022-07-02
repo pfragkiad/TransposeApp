@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32519.111
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transpose", "Transpose\Transpose.csproj", "{D4B06CD4-28E9-4076-95C8-59E1CE575FCD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinTranspose", "WinTranspose\WinTranspose.csproj", "{80F5488F-B60B-40DA-85F9-F35F22EABB0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D4B06CD4-28E9-4076-95C8-59E1CE575FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4B06CD4-28E9-4076-95C8-59E1CE575FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4B06CD4-28E9-4076-95C8-59E1CE575FCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80F5488F-B60B-40DA-85F9-F35F22EABB0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80F5488F-B60B-40DA-85F9-F35F22EABB0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80F5488F-B60B-40DA-85F9-F35F22EABB0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80F5488F-B60B-40DA-85F9-F35F22EABB0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
