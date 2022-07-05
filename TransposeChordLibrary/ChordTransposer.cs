@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -96,7 +97,7 @@ public class ChordTransposer
                     string oldChord = m.Value;
                     allChords.Add(oldChord);
 
-                    string oldNote = m.Groups["note"].Value;
+                    string oldNote = $"{m.Groups["note"].Value}{m.Groups["accidentals"].Value}";
                     int oldNoteIndex = oldMajorScale.Chords.IndexOf(oldNote);
 
                     Scale? currentScale = newScale;
@@ -135,7 +136,7 @@ public class ChordTransposer
                             newNote = enharmonic[0];
                     }
 
-                    string newChord = $"{newNote}{m.Groups["accidentals"].Value}{m.Groups["chord"].Value}{m.Groups["number"].Value}";
+                    string newChord = $"{newNote}{m.Groups["chord"].Value}{m.Groups["number"].Value}";
 
                     Console.WriteLine($"  {oldChord}->{newChord} matched @ line {iLine}, position {m.Index}");
 

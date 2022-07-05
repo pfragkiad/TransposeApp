@@ -4,6 +4,9 @@ namespace WinTranspose
 {
     public partial class Form1 : Form
     {
+        ChordTransposer _transposer;
+
+
         //https://stackoverflow.com/questions/70475830/how-to-use-dependency-injection-in-winforms
         public Form1(ChordTransposer transposer)
         {
@@ -15,7 +18,11 @@ namespace WinTranspose
             _transposer = transposer;
         }
 
-        ChordTransposer _transposer;
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            UpdateTransposedChords();
+        }
+
 
 
 
@@ -61,5 +68,27 @@ namespace WinTranspose
 
 
         }
+
+        private void textBox1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files != null && files.Length != 0)
+            {
+                textBox1.Text = File.ReadAllText(files[0]);
+
+                UpdateTransposedChords();
+
+            }
+        }
+
+        private void textBox1_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Move;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+  
     }
 }

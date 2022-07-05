@@ -78,19 +78,22 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.textBox2);
             this.splitContainer1.Size = new System.Drawing.Size(891, 467);
-            this.splitContainer1.SplitterDistance = 422;
+            this.splitContainer1.SplitterDistance = 420;
             this.splitContainer1.TabIndex = 3;
             // 
             // textBox1
             // 
+            this.textBox1.AllowDrop = true;
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox1.Location = new System.Drawing.Point(0, 0);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(422, 467);
+            this.textBox1.Size = new System.Drawing.Size(420, 467);
             this.textBox1.TabIndex = 1;
+            this.textBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox1_DragDrop);
+            this.textBox1.DragOver += new System.Windows.Forms.DragEventHandler(this.textBox1_DragOver);
             // 
             // textBox2
             // 
@@ -100,7 +103,7 @@
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox2.Size = new System.Drawing.Size(465, 467);
+            this.textBox2.Size = new System.Drawing.Size(467, 467);
             this.textBox2.TabIndex = 2;
             // 
             // radioButtonNormal
@@ -161,6 +164,7 @@
             this.Controls.Add(this.numericUpDown1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
