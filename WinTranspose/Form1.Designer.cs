@@ -30,12 +30,15 @@
         {
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtSong = new System.Windows.Forms.TextBox();
+            this.txtTransposedSong = new System.Windows.Forms.TextBox();
             this.radioButtonNormal = new System.Windows.Forms.RadioButton();
             this.radioButtonSharps = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButtonFlats = new System.Windows.Forms.RadioButton();
+            this.txtSongPath = new System.Windows.Forms.TextBox();
+            this.browseSongDialog = new System.Windows.Forms.OpenFileDialog();
+            this.btnBrowse = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -58,9 +61,8 @@
             0,
             -2147483648});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(127, 23);
+            this.numericUpDown1.Size = new System.Drawing.Size(60, 23);
             this.numericUpDown1.TabIndex = 2;
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // splitContainer1
             // 
@@ -72,39 +74,39 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.textBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.txtSong);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.textBox2);
+            this.splitContainer1.Panel2.Controls.Add(this.txtTransposedSong);
             this.splitContainer1.Size = new System.Drawing.Size(891, 467);
             this.splitContainer1.SplitterDistance = 420;
             this.splitContainer1.TabIndex = 3;
             // 
-            // textBox1
+            // txtSong
             // 
-            this.textBox1.AllowDrop = true;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(420, 467);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox1_DragDrop);
-            this.textBox1.DragOver += new System.Windows.Forms.DragEventHandler(this.textBox1_DragOver);
+            this.txtSong.AllowDrop = true;
+            this.txtSong.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSong.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtSong.Location = new System.Drawing.Point(0, 0);
+            this.txtSong.Multiline = true;
+            this.txtSong.Name = "txtSong";
+            this.txtSong.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSong.Size = new System.Drawing.Size(420, 467);
+            this.txtSong.TabIndex = 1;
+            this.txtSong.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox1_DragDrop);
+            this.txtSong.DragOver += new System.Windows.Forms.DragEventHandler(this.textBox1_DragOver);
             // 
-            // textBox2
+            // txtTransposedSong
             // 
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox2.Location = new System.Drawing.Point(0, 0);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox2.Size = new System.Drawing.Size(467, 467);
-            this.textBox2.TabIndex = 2;
+            this.txtTransposedSong.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtTransposedSong.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtTransposedSong.Location = new System.Drawing.Point(0, 0);
+            this.txtTransposedSong.Multiline = true;
+            this.txtTransposedSong.Name = "txtTransposedSong";
+            this.txtTransposedSong.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtTransposedSong.Size = new System.Drawing.Size(467, 467);
+            this.txtTransposedSong.TabIndex = 2;
             // 
             // radioButtonNormal
             // 
@@ -154,17 +156,44 @@
             this.radioButtonFlats.UseVisualStyleBackColor = true;
             this.radioButtonFlats.CheckedChanged += new System.EventHandler(this.radioButtonFlats_CheckedChanged);
             // 
+            // txtSongPath
+            // 
+            this.txtSongPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSongPath.Location = new System.Drawing.Point(184, 24);
+            this.txtSongPath.Name = "txtSongPath";
+            this.txtSongPath.Size = new System.Drawing.Size(651, 23);
+            this.txtSongPath.TabIndex = 6;
+            // 
+            // browseSongDialog
+            // 
+            this.browseSongDialog.DefaultExt = "txt";
+            this.browseSongDialog.Filter = "Text files|*.txt|All files|*.*";
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.Location = new System.Drawing.Point(841, 22);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowse.TabIndex = 7;
+            this.btnBrowse.Text = "Browse...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1071, 551);
+            this.Controls.Add(this.btnBrowse);
+            this.Controls.Add(this.txtSongPath);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.numericUpDown1);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
@@ -175,17 +204,21 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
         private NumericUpDown numericUpDown1;
         private SplitContainer splitContainer1;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox txtSong;
+        private TextBox txtTransposedSong;
         private RadioButton radioButtonNormal;
         private RadioButton radioButtonSharps;
         private GroupBox groupBox1;
         private RadioButton radioButtonFlats;
+        private TextBox txtSongPath;
+        private OpenFileDialog browseSongDialog;
+        private Button btnBrowse;
     }
 }

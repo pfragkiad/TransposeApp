@@ -47,7 +47,8 @@ public class ChordTransposer
         Scale? oldMajorScale = null, newScale = null;
         bool scaleHasSharps = false;
         bool scaleHasFlats = false;
-        HashSet<string> allChords = new HashSet<string>();
+        
+        HashSet<(string OldChord, string NewChord)> allChords =new ();
 
         StringBuilder writer = new StringBuilder();
 
@@ -95,7 +96,6 @@ public class ChordTransposer
                 foreach (Match m in matches)
                 {
                     string oldChord = m.Value;
-                    allChords.Add(oldChord);
 
                     string oldNote = $"{m.Groups["note"].Value}{m.Groups["accidentals"].Value}";
                     int oldNoteIndex = oldMajorScale.Chords.IndexOf(oldNote);
@@ -141,6 +141,7 @@ public class ChordTransposer
                     Console.WriteLine($"  {oldChord}->{newChord} matched @ line {iLine}, position {m.Index}");
 
                     lineChords.Add((oldChord, newChord, m.Index, m.Length));
+                    allChords.Add((oldChord, newChord));
                 }
 
                 string newLine = line;
@@ -172,29 +173,12 @@ public class ChordTransposer
 
             }
 
-            //string[] tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            //bool matches = false;
-            //foreach (string token in tokens)
-            //{
-            //    (bool localMatches, string oldChord, string newChord) = ProcessChord(oldScale, newScale, allChords, token);
-            //    matches = matches || localMatches;
-            //    if (localMatches)
-            //        Console.WriteLine($"  {oldChord}->{newChord} matched @ line {iLine}");
-            //}
-            //if (!matches)
-            //{
-            //    Console.WriteLine($"Line #{iLine} does not contain chords");
-            //    writer.WriteLine(line); //just copy the line to the output
-            //}
         }
 
 
-        //Console.WriteLine("Captured chords:");
-        //foreach (string chord in allChords.OrderBy(c => c))
-        //{
-        //    (bool localMatches, string oldChord, string newChord) = ProcessChord(oldScale, newScale, allChords, chord);
-        //    Console.WriteLine($"{chord}->{newChord}");
-        //}
+        Console.WriteLine("Captured chords:");
+        foreach (var chord in allChords.OrderBy(c => c.OldChord))
+            Console.WriteLine($"{chord.OldChord}->{chord.NewChord}");
 
         return writer.ToString();
     }
