@@ -6,6 +6,22 @@ using System.Threading.Tasks;
 
 namespace TransposeChordLibrary.Theory;
 
+public enum Notes
+{
+    C, BSharp = C, DDoubleFlat = C,
+    CSharp, DFlat = CSharp, BDoubleSharp = CSharp,
+    D, CDoubleSharp = D, EDoubleFlat = D,
+    DSharp, EFlat = DSharp, FDoubleFlat = DSharp,
+    E, FFlat = E, DDoubleSharp = E,
+    F, ESharp = F, GDoubleFlat = F,
+    FSharp, GFlat = FSharp, EDoubleSharp = FSharp,
+    G, FDoubleSharp=G, ADoubleFlat = G,
+    GSharp, AFlat = GSharp,
+    A, GDoubleSharp = A, BDoubleFlat = A, 
+    B, CFlat = B, ADoubleSharp = B
+}
+
+
 public class Note 
 {
     internal Note(MusicFactory musicFactory)

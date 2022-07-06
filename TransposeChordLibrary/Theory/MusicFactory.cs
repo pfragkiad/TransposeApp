@@ -20,16 +20,11 @@ public class MusicFactory
         _provider = provider;
         BuildNotes();
         BuildPitches();
+        BuildScales();
     }
 
 
-#nullable disable
     public IReadOnlyList<Note> Notes { get; private set; }
-
-    public IReadOnlyList<Pitch> Pitches { get; private set; }
-
-
-#nullable restore
 
     #region Notes
     private void BuildNotes()
@@ -107,13 +102,18 @@ public class MusicFactory
            (n.DoubleSharpNameSolfege?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
            (n.DoubleFlatNameSolfege?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false));
     }
+
+    public Note GetNote(Notes n) => Notes[(int)n];
     #endregion
 
     #region Pitches
 
+    public IReadOnlyList<Pitch> Pitches { get; private set; }
+
+
     private void BuildPitches()
     {
-        var LowA = new Pitch(this) { Note = GetNote("A"), Class = 0, Index = 0 };
+        var LowA = new Pitch(this) { Note = GetNote("A")!, Class = 0, Index = 0 };
 
         _logger.LogDebug("Adding pitches...");
 
@@ -151,6 +151,27 @@ public class MusicFactory
             p.ToString(PitchNotation.Midi).Equals(s, StringComparison.OrdinalIgnoreCase));
     }
 
+    public Pitch? GetPitch(Notes n, int classIndex)
+        => classIndex>=0 && classIndex<=8 ?
+        Pitches.FirstOrDefault(p => p.Note == Notes[(int)n] && p.Class == classIndex) : null;
+
+
     #endregion
 
+
+    #region Scales
+
+    public List<Scale> Scales { get; private set; }
+
+    private void BuildScales()
+    {
+        Scales = new List<Scale>();
+
+        //build C major scale
+        var cMajor = new Scale(this);
+        //  cMajor.Notes.AddRange( Notes. );
+
+    }
+
+    #endregion
 }
