@@ -20,7 +20,8 @@ string songFile = @"C:\Users\north\OneDrive\songs\Καραφώτης Κώστα�
 var app = App.GetMusicApp();
 var m = app.Services.GetService<MusicFactory>()!;
 
-var note = m.GetNote("C"); //Note.Parse("C");
+//var note = m.GetNote("C"); //Note.Parse("C");
+var note = m.GetNote(NoteName.C);
 Console.WriteLine(note.ToStringFull());
 Console.WriteLine( (note+2)==m.GetNote("D"));
 
@@ -51,5 +52,8 @@ Console.WriteLine($"{p2} -> {p2 + 12}");
 Console.WriteLine($"{p2} -> {p2 - 12}");
 p2++;
 Console.WriteLine($"{p2} -> {p2 + 12}");
+
+var cmajor = m.GetMajorScale(NoteName.CSharp);
+Console.WriteLine(cmajor.ToString(false));
 
 

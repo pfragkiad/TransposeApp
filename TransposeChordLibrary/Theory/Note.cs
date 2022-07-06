@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransposeChordLibrary.Theory;
 
-public enum Notes
+public enum NoteName
 {
     C, BSharp = C, DDoubleFlat = C,
     CSharp, DFlat = CSharp, BDoubleSharp = CSharp,
@@ -15,14 +15,14 @@ public enum Notes
     E, FFlat = E, DDoubleSharp = E,
     F, ESharp = F, GDoubleFlat = F,
     FSharp, GFlat = FSharp, EDoubleSharp = FSharp,
-    G, FDoubleSharp=G, ADoubleFlat = G,
+    G, FDoubleSharp = G, ADoubleFlat = G,
     GSharp, AFlat = GSharp,
-    A, GDoubleSharp = A, BDoubleFlat = A, 
+    A, GDoubleSharp = A, BDoubleFlat = A,
     B, CFlat = B, ADoubleSharp = B
 }
 
 
-public class Note 
+public class Note
 {
     internal Note(MusicFactory musicFactory)
     {
@@ -58,8 +58,18 @@ public class Note
     public string? DoubleFlatNameSolfege { get; internal set; }
     #endregion
 
+
+    #region ToString
     public override string ToString() => UnalteredName ?? SharpName ?? FlatName ?? "<Invalid>";
-    public string ToStringSolfege() => UnalteredNameSolfege ?? SharpNameSolfege ?? FlatNameSolfege ?? "<Invalid>";
+
+      public string ToStringSolfege() => UnalteredNameSolfege ?? SharpNameSolfege ?? FlatNameSolfege ?? "<Invalid>";
+  
+    public string ToString(bool preferSharp, bool useSolfege) =>
+        !useSolfege ?
+        UnalteredName ?? (preferSharp ? SharpName ?? FlatName : FlatName ?? SharpName) ?? "<Invalid>" :
+        UnalteredNameSolfege ?? (preferSharp ? SharpNameSolfege ?? FlatNameSolfege : FlatNameSolfege ?? SharpNameSolfege) ?? "<Invalid>" ;
+
+    #endregion
 
 
     public string[] GetEnharmonicNoteNames(bool useSolfege = false) =>
@@ -81,6 +91,7 @@ public class Note
     }
 
     public Note AddSemitones(int semiTones) => Notes[MyMod(Index + semiTones, 12)];
+
     public Note Next { get => AddSemitones(1); }
     public Note Previous { get => AddSemitones(-1); }
 

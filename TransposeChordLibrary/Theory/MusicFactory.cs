@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,6 +23,8 @@ public class MusicFactory
         BuildPitches();
         BuildScales();
     }
+
+    private static string RemoveWhiteSpace(string s) => Regex.Replace(s, @"\s+", "");
 
 
     public IReadOnlyList<Note> Notes { get; private set; }
@@ -56,12 +59,12 @@ public class MusicFactory
             if (previousNote.IsNatural)
             {
                 note.SharpName = $"{previousNote}#";
-                note.SharpNameSolfege = $"{previousNote.UnalteredNameSolfege}#";
+                note.SharpNameSolfege = $"{previousNote.UnalteredNameSolfege} #";
             }
             if (nextNote.IsNatural)
             {
                 note.FlatName = $"{nextNote}b";
-                note.FlatNameSolfege = $"{previousNote.UnalteredNameSolfege}b";
+                note.FlatNameSolfege = $"{nextNote.UnalteredNameSolfege} b";
             }
 
             var previous2Note = Notes[MyMod(i - 2, 12)];
@@ -69,41 +72,41 @@ public class MusicFactory
             if (previous2Note.IsNatural)
             {
                 note.DoubleSharpName = $"{previous2Note}x";
-                note.DoubleSharpNameSolfege = $"{previous2Note.UnalteredNameSolfege}x";
+                note.DoubleSharpNameSolfege = $"{previous2Note.UnalteredNameSolfege} x";
             }
             if (next2Note.IsNatural)
             {
                 note.DoubleFlatName = $"{next2Note}bb";
-                note.DoubleFlatNameSolfege = $"{next2Note.UnalteredNameSolfege}bb";
+                note.DoubleFlatNameSolfege = $"{next2Note.UnalteredNameSolfege} bb";
             }
 
             _logger.LogDebug("Added {n}, Solfege: {n2}", note.ToStringFull(), note.ToStringFull(true));
         }
     }
 
-    public Note? GetNote(string s)
+    public Note? GetNote(string note)
     {
         //remove whitespace
-        s = Regex.Replace(s, @"\s+", "");
+        note = RemoveWhiteSpace(note);
 
         var found = Notes.FirstOrDefault(n =>
-           (n.UnalteredName?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-           (n.SharpName?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-           (n.FlatName?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-           (n.DoubleSharpName?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-           (n.DoubleFlatName?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false));
+           (n.UnalteredName?.Equals(note, StringComparison.OrdinalIgnoreCase) ?? false) ||
+           (n.SharpName?.Equals(note, StringComparison.OrdinalIgnoreCase) ?? false) ||
+           (n.FlatName?.Equals(note, StringComparison.OrdinalIgnoreCase) ?? false) ||
+           (n.DoubleSharpName?.Equals(note, StringComparison.OrdinalIgnoreCase) ?? false) ||
+           (n.DoubleFlatName?.Equals(note, StringComparison.OrdinalIgnoreCase) ?? false));
         if (found is not null) return found;
 
         //else search based on Solfege name
         return Notes.FirstOrDefault(n =>
-           (n.UnalteredNameSolfege?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-           (n.SharpNameSolfege?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-           (n.FlatNameSolfege?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-           (n.DoubleSharpNameSolfege?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
-           (n.DoubleFlatNameSolfege?.Equals(s, StringComparison.OrdinalIgnoreCase) ?? false));
+           RemoveWhiteSpace(n.UnalteredNameSolfege ?? "").Equals(note, StringComparison.OrdinalIgnoreCase) ||
+           RemoveWhiteSpace(n.SharpNameSolfege ?? "").Equals(note, StringComparison.OrdinalIgnoreCase) ||
+           RemoveWhiteSpace(n.FlatNameSolfege ?? "").Equals(note, StringComparison.OrdinalIgnoreCase) ||
+           RemoveWhiteSpace(n.DoubleSharpNameSolfege ?? "").Equals(note, StringComparison.OrdinalIgnoreCase) ||
+           RemoveWhiteSpace(n.DoubleFlatNameSolfege ?? "").Equals(note, StringComparison.OrdinalIgnoreCase));
     }
 
-    public Note GetNote(Notes n) => Notes[(int)n];
+    public Note GetNote(NoteName n) => Notes[(int)n];
     #endregion
 
     #region Pitches
@@ -139,20 +142,20 @@ public class MusicFactory
         Pitches = pitches;
     }
 
-    public Pitch? GetPitch(string s)
+    public Pitch? GetPitch(string pitch)
     {
         //remove whitespace
-        s = Regex.Replace(s, @"\s+", "");
+        pitch = RemoveWhiteSpace(pitch);
         return Pitches.FirstOrDefault(p =>
-            p.ToString(PitchNotation.Scientific).Equals(s, StringComparison.OrdinalIgnoreCase) ||
-            p.ToString(PitchNotation.Solfege).Equals(s, StringComparison.OrdinalIgnoreCase) ||
-            p.ToString(PitchNotation.Helmholtz).Equals(s, StringComparison.OrdinalIgnoreCase) ||
-            p.ToString(PitchNotation.English).Equals(s, StringComparison.OrdinalIgnoreCase) ||
-            p.ToString(PitchNotation.Midi).Equals(s, StringComparison.OrdinalIgnoreCase));
+            p.ToString(PitchNotation.Scientific).Equals(pitch, StringComparison.OrdinalIgnoreCase) ||
+            RemoveWhiteSpace(p.ToString(PitchNotation.Solfege)).Equals(pitch, StringComparison.OrdinalIgnoreCase) ||
+            p.ToString(PitchNotation.Helmholtz).Equals(pitch, StringComparison.OrdinalIgnoreCase) ||
+            p.ToString(PitchNotation.English).Equals(pitch, StringComparison.OrdinalIgnoreCase) ||
+            p.ToString(PitchNotation.Midi).Equals(pitch, StringComparison.OrdinalIgnoreCase));
     }
 
-    public Pitch? GetPitch(Notes n, int classIndex)
-        => classIndex>=0 && classIndex<=8 ?
+    public Pitch? GetPitch(NoteName n, int classIndex)
+        => classIndex >= 0 && classIndex <= 8 ?
         Pitches.FirstOrDefault(p => p.Note == Notes[(int)n] && p.Class == classIndex) : null;
 
 
@@ -169,9 +172,21 @@ public class MusicFactory
 
         //build C major scale
         var cMajor = new Scale(this);
-        //  cMajor.Notes.AddRange( Notes. );
+        cMajor.Notes = "C D E F G A B C".Split(' ').Select(s => GetNote(s)).ToList();
+        cMajor.UpdatePitches();
+        cMajor.ScaleType = ScaleType.Major;
+        Scales.Add(cMajor);
 
+        //build all others by transposition
+        for (int iSemiTone = 1; iSemiTone <= 11; iSemiTone++) 
+            Scales.Add(cMajor.Transpose(iSemiTone));
     }
+
+    public Scale? GetMajorScale(NoteName name) =>
+        Scales.FirstOrDefault(sc => sc.Notes[0] == GetNote(name));
+
+    public Scale? GetMajorScale(string note) =>
+        Scales.FirstOrDefault(sc => sc.Notes[0] == GetNote(note));
 
     #endregion
 }
