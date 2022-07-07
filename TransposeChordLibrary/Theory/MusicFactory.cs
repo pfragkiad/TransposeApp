@@ -10,6 +10,17 @@ using System.Threading.Tasks;
 
 namespace TransposeChordLibrary.Theory;
 
+
+public enum IntervalQuality
+{
+    Major,
+    Perfect,
+    Minor,
+    Diminished,
+    Augmented
+}
+
+
 public class MusicFactory
 {
     private readonly ILogger<MusicFactory> _logger;
@@ -226,9 +237,9 @@ public class MusicFactory
     {
         Scales = new List<Scale>();
 
-         _logger.LogDebug("Adding major scales...");
+        _logger.LogDebug("Adding major scales...");
 
-       //build C major scale
+        //build C major scale
         var cMajor = new Scale(this);
         cMajor.Notes = CMajorNoteNames.Select(s => GetNote(s)).ToList();
         cMajor.UpdatePitches();
@@ -241,7 +252,7 @@ public class MusicFactory
 
 
         foreach (var scale in Scales)
-            _logger.LogDebug("Added {scale}",scale);
+            _logger.LogDebug("Added {scale}", scale);
     }
 
     public Scale? GetMajorScale(NoteName name) =>
@@ -249,6 +260,29 @@ public class MusicFactory
 
     public Scale? GetMajorScale(string note) =>
         Scales.FirstOrDefault(sc => sc.Notes[0] == GetNote(note));
+
+    public string GetInterval(string startNote, int number, IntervalQuality quality)
+    {
+        //get the default (major interval)
+        var scale = Scales.FirstOrDefault(s => s.Notes[0] == GetNote(startNote));
+
+        int index = MyMod(number - 1, 8);
+        var note = scale.Notes[index];
+
+        var notes = scale.GetAllNoteNames().Where(nn => nn[0] == startNote).FirstOrDefault();
+        string majorPerfectName = notes![index];
+
+        //https://www.youtube.com/watch?v=8RPggfJ5bjQ&ab_channel=BradHarrisonMusic
+        if (quality == IntervalQuality.Major || quality == IntervalQuality.Perfect)
+            return majorPerfectName;
+        else if (quality == IntervalQuality.Minor  )
+        {
+            if (majorPerfectName.EndsWith("x")) return StripAccidentals(majorPerfectName) + "#";
+            else if (majorPerfectName.EndsWith("#")) return StripAccidentals(majorPerfectName);
+            else return majorPerfectName + "b";
+        }
+        return "";
+    }
 
     #endregion
 }
