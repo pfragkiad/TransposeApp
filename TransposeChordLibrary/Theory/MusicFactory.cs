@@ -166,20 +166,82 @@ public class MusicFactory
 
     public List<Scale> Scales { get; private set; }
 
+    public List<string> CMajorNoteNames => "C D E F G A B C".Split(' ').ToList();
+    public List<string> CMajorNoteNamesSolfege => "do re mi fa sol la si do".Split(' ').ToList();
+
+    //Returns a 2nd Interval.
+    public string? GetΝextIntervalNoteName(string currentNoteName, Note nextNote)
+    {
+
+        string currentNoteWithoutAccidentals = StripAccidentals(currentNoteName)!;
+        bool useSolfege = CMajorNoteNamesSolfege.Contains(currentNoteWithoutAccidentals);
+
+        if (!useSolfege)
+        {
+            string nextNoteWithoutAccidentals = CMajorNoteNames[
+                CMajorNoteNames.IndexOf(currentNoteWithoutAccidentals) + 1];
+
+            if (nextNote.UnalteredName == nextNoteWithoutAccidentals)
+                return nextNote.UnalteredName;
+
+            if (StripAccidentals(nextNote.SharpName) == nextNoteWithoutAccidentals)
+                return nextNote.SharpName;
+
+            if (StripAccidentals(nextNote.FlatName) == nextNoteWithoutAccidentals)
+                return nextNote.FlatName;
+
+            if (StripAccidentals(nextNote.DoubleSharpName) == nextNoteWithoutAccidentals)
+                return nextNote.DoubleSharpName;
+
+            if (StripAccidentals(nextNote.DoubleFlatName) == nextNoteWithoutAccidentals)
+                return nextNote.DoubleFlatName;
+        }
+        else
+        {
+            string nextNoteWithoutAccidentals = CMajorNoteNamesSolfege[
+                CMajorNoteNamesSolfege.IndexOf(currentNoteWithoutAccidentals) + 1];
+
+            if (nextNote.UnalteredNameSolfege == nextNoteWithoutAccidentals)
+                return nextNote.UnalteredNameSolfege;
+
+            if (StripAccidentals(nextNote.SharpNameSolfege) == nextNoteWithoutAccidentals)
+                return nextNote.SharpNameSolfege;
+
+            if (StripAccidentals(nextNote.FlatNameSolfege) == nextNoteWithoutAccidentals)
+                return nextNote.FlatNameSolfege;
+
+            if (StripAccidentals(nextNote.DoubleSharpNameSolfege) == nextNoteWithoutAccidentals)
+                return nextNote.DoubleSharpNameSolfege;
+
+            if (StripAccidentals(nextNote.DoubleFlatNameSolfege) == nextNoteWithoutAccidentals)
+                return nextNote.DoubleFlatNameSolfege;
+        }
+
+        return null;
+
+    }
+
+
     private void BuildScales()
     {
         Scales = new List<Scale>();
 
-        //build C major scale
+         _logger.LogDebug("Adding major scales...");
+
+       //build C major scale
         var cMajor = new Scale(this);
-        cMajor.Notes = "C D E F G A B C".Split(' ').Select(s => GetNote(s)).ToList();
+        cMajor.Notes = CMajorNoteNames.Select(s => GetNote(s)).ToList();
         cMajor.UpdatePitches();
         cMajor.ScaleType = ScaleType.Major;
         Scales.Add(cMajor);
 
         //build all others by transposition
-        for (int iSemiTone = 1; iSemiTone <= 11; iSemiTone++) 
+        for (int iSemiTone = 1; iSemiTone <= 11; iSemiTone++)
             Scales.Add(cMajor.Transpose(iSemiTone));
+
+
+        foreach (var scale in Scales)
+            _logger.LogDebug("Added {scale}",scale);
     }
 
     public Scale? GetMajorScale(NoteName name) =>

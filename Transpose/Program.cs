@@ -53,7 +53,7 @@ Console.WriteLine($"{p2} -> {p2 - 12}");
 p2++;
 Console.WriteLine($"{p2} -> {p2 + 12}");
 
-var cmajor = m.GetMajorScale(NoteName.CSharp);
+var cmajor = m.GetMajorScale(NoteName.D);
 Console.WriteLine(cmajor.ToString(false));
 
 

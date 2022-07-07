@@ -39,10 +39,8 @@ public class Note
 
     public bool IsNatural { get => !string.IsNullOrWhiteSpace(UnalteredName); }
 
-    private static char[] accidentals = new char[] { '#', 'b' };
     private readonly MusicFactory _musicFactory;
 
-    public static string StripAccidentals(string s) => s.TrimEnd(accidentals);
 
     #region Enharmonic notes
 
@@ -62,32 +60,30 @@ public class Note
     #region ToString
     public override string ToString() => UnalteredName ?? SharpName ?? FlatName ?? "<Invalid>";
 
-      public string ToStringSolfege() => UnalteredNameSolfege ?? SharpNameSolfege ?? FlatNameSolfege ?? "<Invalid>";
-  
+    public string ToStringSolfege() => UnalteredNameSolfege ?? SharpNameSolfege ?? FlatNameSolfege ?? "<Invalid>";
+
     public string ToString(bool preferSharp, bool useSolfege) =>
         !useSolfege ?
         UnalteredName ?? (preferSharp ? SharpName ?? FlatName : FlatName ?? SharpName) ?? "<Invalid>" :
-        UnalteredNameSolfege ?? (preferSharp ? SharpNameSolfege ?? FlatNameSolfege : FlatNameSolfege ?? SharpNameSolfege) ?? "<Invalid>" ;
+        UnalteredNameSolfege ?? (preferSharp ? SharpNameSolfege ?? FlatNameSolfege : FlatNameSolfege ?? SharpNameSolfege) ?? "<Invalid>";
 
     #endregion
 
 
     public string[] GetEnharmonicNoteNames(bool useSolfege = false) =>
            !useSolfege ?
-            (IsNatural ?
-            new string[] { SharpName, FlatName, DoubleSharpName, DoubleFlatName } :
-            new string[] { FlatName, DoubleSharpName, DoubleFlatName }).Where(n => !string.IsNullOrWhiteSpace(n)).ToArray() :
-             (IsNatural ?
-            new string[] { SharpNameSolfege, FlatNameSolfege, DoubleSharpNameSolfege, DoubleFlatNameSolfege } :
-            new string[] { FlatNameSolfege, DoubleSharpNameSolfege, DoubleFlatNameSolfege }).Where(n => !string.IsNullOrWhiteSpace(n)).ToArray();
+            new string[] { UnalteredName, SharpName, FlatName, DoubleSharpName, DoubleFlatName }
+                .Where(n => !string.IsNullOrWhiteSpace(n)).ToArray() :
+            new string[] { UnalteredNameSolfege, SharpNameSolfege, FlatNameSolfege, DoubleSharpNameSolfege, DoubleFlatNameSolfege }
+                .Where(n => !string.IsNullOrWhiteSpace(n)).ToArray();
 
 
     public string ToStringFull(bool useSolfege = false)
     {
         var enharmonicNotes = GetEnharmonicNoteNames(useSolfege);
         return IsNatural ?
-                 $"{UnalteredName} ({string.Join(", ", enharmonicNotes)})" :
-                 $"{SharpName} ({string.Join(", ", enharmonicNotes)})";
+                 $"{(!useSolfege ? UnalteredName : UnalteredNameSolfege)} ({string.Join(", ", enharmonicNotes)})" :
+                 $"{(!useSolfege ? SharpName : SharpNameSolfege)} ({string.Join(", ", enharmonicNotes)})";
     }
 
     public Note AddSemitones(int semiTones) => Notes[MyMod(Index + semiTones, 12)];
