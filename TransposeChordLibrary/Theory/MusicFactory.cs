@@ -263,23 +263,37 @@ public class MusicFactory
 
     public string GetInterval(string startNote, int number, IntervalQuality quality)
     {
-        //get the default (major interval)
         var scale = Scales.FirstOrDefault(s => s.Notes[0] == GetNote(startNote));
 
         int index = MyMod(number - 1, 8);
         var note = scale.Notes[index];
 
         var notes = scale.GetAllNoteNames().Where(nn => nn[0] == startNote).FirstOrDefault();
+        //get the default (major interval)
         string majorPerfectName = notes![index];
 
         //https://www.youtube.com/watch?v=8RPggfJ5bjQ&ab_channel=BradHarrisonMusic
         if (quality == IntervalQuality.Major || quality == IntervalQuality.Perfect)
             return majorPerfectName;
-        else if (quality == IntervalQuality.Minor  )
+        else if (quality == IntervalQuality.Minor ||
+            quality == IntervalQuality.Diminished && (index==0 || index==3 || index==4 || index==7)  )
         {
             if (majorPerfectName.EndsWith("x")) return StripAccidentals(majorPerfectName) + "#";
             else if (majorPerfectName.EndsWith("#")) return StripAccidentals(majorPerfectName);
             else return majorPerfectName + "b";
+        }
+        else if (quality==IntervalQuality.Augmented)
+        {
+            if (majorPerfectName.EndsWith("bb")) return StripAccidentals(majorPerfectName) + "b";
+            else if (majorPerfectName.EndsWith("b")) return StripAccidentals(majorPerfectName);
+            else if (majorPerfectName.EndsWith("#")) return StripAccidentals(majorPerfectName) + "x";
+            else return majorPerfectName + "#";
+        }
+        else if (quality==IntervalQuality.Diminished) //from major (not perfect interval)
+        {
+            if (majorPerfectName.EndsWith("x")) return StripAccidentals(majorPerfectName);
+            else if (majorPerfectName.EndsWith("#")) return StripAccidentals(majorPerfectName) + "b";
+            else return majorPerfectName + "bb";
         }
         return "";
     }

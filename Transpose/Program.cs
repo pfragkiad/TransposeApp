@@ -56,6 +56,6 @@ Console.WriteLine($"{p2} -> {p2 + 12}");
 var cmajor = m.GetMajorScale(NoteName.D);
 Console.WriteLine(cmajor.ToString(false));
 
-Console.WriteLine(m.GetInterval("C#", 5, IntervalQuality.Perfect));
+Console.WriteLine(m.GetInterval("C#", 3, IntervalQuality.Diminished));
 
 
